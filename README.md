@@ -29,6 +29,20 @@ Environment variables:
 - `PORT`: default `3001`.
 - `ALLOWED_HOSTS`: comma-separated Host headers the server accepts. Default `localhost,127.0.0.1,quiz.duoswipe.lol`.
 
+## Deploy (Docker + Caddy)
+
+`docker-compose.yml` runs two containers:
+- `app`: the server, built from the `Dockerfile` (Node 22 Alpine, production dependencies only, runs as the non-root `node` user, with a health check on `/health`).
+- `caddy`: serves `https://quiz.duoswipe.lol` with an automatic certificate (see `Caddyfile`) and proxies to `app:3001`. Ports 80 and 443 must be open, and DNS for `quiz.duoswipe.lol` must point at the server.
+
+```sh
+git clone https://github.com/tomtomsatnav/quiz-card-mcp.git && cd quiz-card-mcp
+docker compose up -d --build
+curl https://quiz.duoswipe.lol/health
+```
+
+The Claude custom connector URL is `https://quiz.duoswipe.lol/mcp`.
+
 ## Known limitations
 
 - **Answers are visible in the tool call.** Claude sends the correct answers to the server along with the questions, so anyone who expands the tool call in Claude can see them. That's acceptable for v1.

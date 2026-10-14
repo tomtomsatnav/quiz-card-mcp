@@ -6,6 +6,7 @@ MCP App that renders a 5-question multiple-choice quiz card in Claude.
 - **Log friction in `FRICTION.md`**: every failure, guess or workaround, in the format given in the brief.
 - Ask Tom before running any command on the VPS or changing DNS.
 - Commit after each step with a clear message.
+- At the end of each step, append the step report (what changed, how it was checked, friction logged, what's next) to `docs/REPORTS.md` and commit it with the step.
 - MCP Apps SDK is v2 (`@modelcontextprotocol/ext-apps` + split `@modelcontextprotocol/server|client|node|express` packages). Check the official docs, not memory: https://apps.extensions.modelcontextprotocol.io/api/
 
 ## Commands

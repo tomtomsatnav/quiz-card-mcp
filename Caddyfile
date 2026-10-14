@@ -1,0 +1,5 @@
+# Caddy gets and renews the HTTPS certificate automatically.
+# reverse_proxy keeps the original Host header, which the app checks against ALLOWED_HOSTS.
+quiz.duoswipe.lol {
+	reverse_proxy app:3001
+}

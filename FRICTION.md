@@ -63,3 +63,11 @@
 - Workaround: show right/wrong with a 2px coloured border and a coloured ✓/✗ label; option text keeps the normal text colour. Re-checked in both themes.
 - Time lost: ~4 min
 - Category: host behaviour
+
+### 2026-10-14: Docker Desktop can't mount files from the scratchpad
+- Who: agent
+- Trying to: run the compose stack locally with a test Caddyfile (`tls internal`) kept out of the repo
+- What went wrong / was guessed: mounting a Caddyfile from `/private/tmp/...` failed with "not a directory": Docker Desktop doesn't share that path with its VM. Separately, a zsh-quoting slip broke one curl line (`$CURL_EXTRA` not split).
+- Workaround: put the test Caddyfile inline in the override file using Compose `configs: content:`, and replaced the ports with `!override` so the local test doesn't take 80/443.
+- Time lost: ~4 min
+- Category: deploying
