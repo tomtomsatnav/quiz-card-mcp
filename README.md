@@ -59,7 +59,7 @@ The Dockerfile and compose file stay for local runs and other hosts. `HOST` (def
 - No login. Anyone with the URL can use the server, which stores no data.
 - Claude only. Other MCP Apps hosts may work but aren't tested.
 - **The card doesn't report the score back to Claude.** After the final score Claude knows nothing about the result and can reply as if the quiz were just starting ("Good luck!"). See FRICTION.md.
-- **Host may prefer its own quiz feature.** Claude's built-in quiz widget can win over `show_quiz`; the tool description tells Claude to prefer ours, but the host decides.
+- **Host may prefer its own quiz feature.** Claude's built-in quiz widget can win over `show_quiz`; even with an "ALWAYS use this tool" description, an unprompted "quiz me on…" still got the built-in quiz and the connector was not consulted. Name the connector or tool in the prompt.
 
 ## v2 ideas
 

@@ -105,3 +105,6 @@ Step 7: add `https://quiz.duoswipe.lol/mcp` as a custom connector in Claude and 
 
 ### What's next
 Tom re-tests unprompted use. If the built-in widget still wins, options are a stronger description or telling users to name the tool. Score reporting is v2.
+
+### Step 7 addendum: re-test result (2026-10-14)
+Tom re-tested "quiz me on UK capitals" without naming the tool after the new description was live. Claude still used its built-in quiz and showed no "Loaded quiz" step. **The description change did not fix preference.** Likely cause (unverified): the host picks its built-in feature before consulting connector tools. Logged in FRICTION.md. Working path in v1: name the connector/tool in the prompt. Needs a decision from Tom on next steps.

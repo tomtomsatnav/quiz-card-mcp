@@ -111,3 +111,11 @@
 - Workaround: none in v1 (out of scope). Noted as v2 in the README: the card would send the score to the host (e.g. a model-context update or follow-up message) when the quiz ends.
 - Time lost: ~0 min (observed)
 - Category: host behaviour
+
+### 2026-10-14: "ALWAYS use this tool" description did not make Claude use show_quiz unprompted
+- Who: Tom
+- Trying to: re-test "quiz me on UK capitals" in a new chat, without naming the tool, after the reworded description was deployed and confirmed live via tools/list
+- What went wrong / was guessed: Claude still used its built-in quiz. No "Loaded quiz" step appeared. Hypothesis (not verified): the host decides from its own features and tool names before it ever loads or reads a connector tool's description, so wording inside the description can't win. The step 7 report and README implied the description was a fix; it wasn't.
+- Workaround: v1 still works when the user names the connector or tool in the prompt (e.g. "use the Quiz Card connector to quiz me on UK capitals"). TEST-SCRIPT.md and README now say so. Open options for Tom: try other prompt phrasings, check whether the tool shows up in Claude's tool list at all for that chat, or accept explicit invocation as the v1 behaviour.
+- Time lost: ~10 min (cumulative with the entry above)
+- Category: host behaviour

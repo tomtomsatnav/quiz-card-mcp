@@ -9,7 +9,8 @@ Connector URL: `https://quiz.duoswipe.lol/mcp` (Settings > Connectors > Add cust
 ## Tests
 | # | Do this | Expect |
 |---|---|---|
-| 1 | Type "quiz me on UK capitals" (don't name the tool) | A card with one question and 4 options. Claude's own built-in quiz widget is a fail, see FRICTION.md. |
+| 1 | Type "use the Quiz Card connector to quiz me on UK capitals" | A card with one question and 4 options. |
+| 1b | Type "quiz me on UK capitals" (no tool named) | Known to fail: Claude's built-in quiz is used and no "Loaded quiz" step appears (FRICTION.md). |
 | 2 | Click a wrong option | The option is marked wrong and the correct one is highlighted |
 | 3 | Click a right option on another question | Marked right |
 | 4 | Click Next through all 5 questions | A final score such as 3/5 |
