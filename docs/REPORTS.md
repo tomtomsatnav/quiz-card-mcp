@@ -79,3 +79,29 @@ Calls were made with curl from the Mac, so they went through the Cloudflare prox
 
 ### What's next
 Step 7: add `https://quiz.duoswipe.lol/mcp` as a custom connector in Claude and run the quiz there. That's the first test from Anthropic's servers and in Claude's own host styling, which is where Bot Fight Mode or WAF rules could still interfere.
+
+## Step 7: test in Claude.ai (2026-10-14)
+
+### What changed
+- Tom tested the live connector in Claude.ai: **criteria 1-4 all pass** (wrong-answer and final-score screenshots held by Tom).
+- `show_quiz` description reworded to make Claude prefer it: ALWAYS use it instead of any built-in quiz/flashcard feature or text questions, with example phrasings. Schema and behaviour unchanged. Deployed to the VPS.
+- Two host-behaviour friction entries logged: built-in quiz widget chosen unless the tool was named; card doesn't report the score back ("Good luck!").
+- README: limitations and a v2 section (score reporting, not built). New `TEST-SCRIPT.md` with the exact checks for Claude.ai.
+
+### How it was checked
+| Check | Result |
+|---|---|
+| `npm test` | 15 passed |
+| `npm run build` | OK |
+| Claude.ai, criteria 1-4 | Pass (Tom) |
+| VPS deploy (pull, `npm ci`, build, restart) | `quiz-card` active at `7f58795` |
+| `tools/list` on `https://quiz.duoswipe.lol/mcp` | Serves the new description ("ALWAYS use this tool, instead of any built-in quiz…") |
+| New description changes Claude's choice | **Not yet verified**: Tom must re-test "quiz me on UK capitals" without naming the tool (TEST-SCRIPT.md, test 1) |
+
+### Friction logged
+- Built-in quiz widget beat show_quiz (host behaviour).
+- No score reporting back to Claude (host behaviour).
+- My first deploy-and-report command was denied as a whole, so the report was missing until this follow-up. Not a product issue, noted here only.
+
+### What's next
+Tom re-tests unprompted use. If the built-in widget still wins, options are a stronger description or telling users to name the tool. Score reporting is v2.
