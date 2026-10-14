@@ -1,0 +1,156 @@
+:root {
+  color-scheme: light dark;
+
+  /* Fallbacks for host style variables; Claude supplies its own via host context. */
+  --color-text-primary: light-dark(#1f2937, #f3f4f6);
+  --color-text-secondary: light-dark(#4b5563, #9ca3af);
+  --color-text-success: light-dark(#15803d, #4ade80);
+  --color-text-danger: light-dark(#b91c1c, #f87171);
+  --color-background-primary: light-dark(#ffffff, #1a1a1a);
+  --color-background-secondary: light-dark(#f3f4f6, #262626);
+  --color-background-success: light-dark(#f0fdf4, #14532d);
+  --color-background-danger: light-dark(#fef2f2, #450a0a);
+  --color-border-primary: light-dark(#d1d5db, #404040);
+  --color-border-success: light-dark(#16a34a, #22c55e);
+  --color-border-danger: light-dark(#dc2626, #ef4444);
+  --color-ring-primary: light-dark(#3b82f6, #60a5fa);
+  --color-background-inverse: light-dark(#1a1a1a, #ffffff);
+  --color-text-inverse: light-dark(#f3f4f6, #1f2937);
+  --border-radius-md: 8px;
+  --border-width-regular: 1px;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --font-text-md-size: 1rem;
+  --font-text-md-line-height: 1.5;
+  --font-text-sm-size: 0.875rem;
+  --font-heading-lg-size: 1.25rem;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-text-md-size);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--font-text-md-line-height);
+  color: var(--color-text-primary);
+}
+
+.card {
+  max-width: 560px;
+  padding: var(--spacing-md);
+
+  > * {
+    margin: 0;
+  }
+
+  > * + * {
+    margin-top: var(--spacing-md);
+  }
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  font-size: var(--font-text-sm-size);
+  color: var(--color-text-secondary);
+}
+
+.question {
+  font-size: var(--font-heading-lg-size);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.3;
+}
+
+.options {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: 0;
+  list-style: none;
+}
+
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width-regular) solid var(--color-border-primary);
+  border-radius: var(--border-radius-md);
+  font: inherit;
+  text-align: left;
+  color: var(--color-text-primary);
+  background: var(--color-background-primary);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--color-background-secondary);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &.correct {
+    border-color: var(--color-border-success);
+    color: var(--color-text-success);
+    background: var(--color-background-success);
+    font-weight: var(--font-weight-bold);
+  }
+
+  &.wrong {
+    border-color: var(--color-border-danger);
+    color: var(--color-text-danger);
+    background: var(--color-background-danger);
+  }
+}
+
+.mark {
+  flex: none;
+  font-weight: var(--font-weight-bold);
+}
+
+.feedback {
+  font-weight: var(--font-weight-bold);
+
+  &.correct { color: var(--color-text-success); }
+  &.wrong { color: var(--color-text-danger); }
+}
+
+.next {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font: inherit;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-inverse);
+  background: var(--color-background-inverse);
+  cursor: pointer;
+}
+
+.option:focus-visible,
+.next:focus-visible {
+  outline: calc(var(--border-width-regular) * 2) solid var(--color-ring-primary);
+  outline-offset: var(--border-width-regular);
+}
+
+.score {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+}
+
+.status {
+  color: var(--color-text-secondary);
+
+  &.error { color: var(--color-text-danger); }
+}
