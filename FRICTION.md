@@ -79,3 +79,11 @@
 - Workaround: none yet. Asked Tom to run a read-only script himself or add a key for this Mac.
 - Time lost: ~5 min (blocked)
 - Category: deploying
+
+### 2026-10-14: VPS didn't match the step 5 deploy plan
+- Who: agent
+- Trying to: deploy with the step 5 Docker + Caddy compose stack (step 6)
+- What went wrong / was guessed: the plan assumed a free host with Docker. The VPS has no Docker, and a system Caddy 2.6.2 already owns 80/443 for duoswipe.lol. ufw allows 443 only from Cloudflare and keeps 80 closed, so a grey-cloud `quiz` name could neither be reached nor get a Let's Encrypt certificate. The server also bound 0.0.0.0 with no way to change it.
+- Workaround: put `quiz` behind Cloudflare (proxied), add a site block to the existing Caddy that reuses the wildcard origin certificate, and run the app as a systemd service under a dedicated user. Added a `HOST` env var to `main.ts` (default 0.0.0.0 for the container; 127.0.0.1 on the VPS). Dockerfile and compose stay for local runs.
+- Time lost: ~25 min
+- Category: deploying

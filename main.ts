@@ -8,13 +8,15 @@ import type { Request, Response } from "express";
 import { createServer } from "./server.js";
 
 const port = parseInt(process.env.PORT ?? "3001", 10);
+// Interface to bind. 0.0.0.0 suits the container; the VPS systemd unit sets 127.0.0.1.
+const host = process.env.HOST ?? "0.0.0.0";
 // Host headers accepted (DNS rebinding protection). Caddy forwards the public hostname.
 const allowedHosts = (process.env.ALLOWED_HOSTS ?? "localhost,127.0.0.1,quiz.duoswipe.lol")
   .split(",")
   .map((h) => h.trim())
   .filter(Boolean);
 
-const app = createMcpExpressApp({ host: "0.0.0.0", allowedHosts });
+const app = createMcpExpressApp({ host, allowedHosts });
 app.use(cors());
 
 app.get("/health", (_req: Request, res: Response) => {
@@ -41,12 +43,12 @@ app.all("/mcp", async (req: Request, res: Response) => {
   }
 });
 
-const httpServer = app.listen(port, (err) => {
+const httpServer = app.listen(port, host, (err) => {
   if (err) {
     console.error("Failed to start server:", err);
     process.exit(1);
   }
-  console.log(`MCP server listening on http://localhost:${port}/mcp (allowed hosts: ${allowedHosts.join(", ")})`);
+  console.log(`MCP server listening on http://${host}:${port}/mcp (allowed hosts: ${allowedHosts.join(", ")})`);
 });
 
 const shutdown = () => {
