@@ -23,3 +23,11 @@
 - Workaround: upgraded to vitest 5 (supports vite 6). Kept vite-plugin-singlefile: it's build-time only and `npm audit --omit=dev` reports 0 vulnerabilities, so nothing vulnerable ships in the image.
 - Time lost: ~3 min
 - Category: docs
+
+### 2026-10-14: Vitest fails to start because of the example's vite.config.ts
+- Who: agent
+- Trying to: run the first unit tests
+- What went wrong / was guessed: Vitest loads `vite.config.ts`, which (copied from the official example) throws "INPUT environment variable is not set". The examples have no unit tests, so they never hit this.
+- Workaround: added `vitest.config.ts`, which Vitest uses instead of `vite.config.ts`.
+- Time lost: ~2 min
+- Category: testing
