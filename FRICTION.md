@@ -31,3 +31,11 @@
 - Workaround: added `vitest.config.ts`, which Vitest uses instead of `vite.config.ts`.
 - Time lost: ~2 min
 - Category: testing
+
+### 2026-10-14: createMcpExpressApp host checks not covered in the quickstart
+- Who: agent
+- Trying to: run the server behind Caddy at quiz.duoswipe.lol
+- What went wrong / was guessed: the quickstart binds `0.0.0.0` with no Host header checks. The v2 package's type docs (not the quickstart) describe an `allowedHosts` option for DNS rebinding protection. My first `/health` curl also raced the server starting up and failed to connect.
+- Workaround: pass `allowedHosts` (env `ALLOWED_HOSTS`, default `localhost,127.0.0.1,quiz.duoswipe.lol`); confirmed an unknown Host gets 403. Re-ran the health check once the server was up.
+- Time lost: ~3 min
+- Category: docs
