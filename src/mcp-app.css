@@ -8,8 +8,6 @@
   --color-text-danger: light-dark(#b91c1c, #f87171);
   --color-background-primary: light-dark(#ffffff, #1a1a1a);
   --color-background-secondary: light-dark(#f3f4f6, #262626);
-  --color-background-success: light-dark(#f0fdf4, #14532d);
-  --color-background-danger: light-dark(#fef2f2, #450a0a);
   --color-border-primary: light-dark(#d1d5db, #404040);
   --color-border-success: light-dark(#16a34a, #22c55e);
   --color-border-danger: light-dark(#dc2626, #ef4444);
@@ -101,23 +99,25 @@ html, body {
     cursor: default;
   }
 
+  /* Highlight with border and mark only: host success/danger backgrounds can make text hard to read. */
   &.correct {
     border-color: var(--color-border-success);
-    color: var(--color-text-success);
-    background: var(--color-background-success);
+    box-shadow: inset 0 0 0 1px var(--color-border-success);
     font-weight: var(--font-weight-bold);
   }
 
   &.wrong {
     border-color: var(--color-border-danger);
-    color: var(--color-text-danger);
-    background: var(--color-background-danger);
+    box-shadow: inset 0 0 0 1px var(--color-border-danger);
   }
 }
 
 .mark {
   flex: none;
   font-weight: var(--font-weight-bold);
+
+  .correct > & { color: var(--color-text-success); }
+  .wrong > & { color: var(--color-text-danger); }
 }
 
 .feedback {

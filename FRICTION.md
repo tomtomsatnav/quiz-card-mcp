@@ -39,3 +39,27 @@
 - Workaround: pass `allowedHosts` (env `ALLOWED_HOSTS`, default `localhost,127.0.0.1,quiz.duoswipe.lol`); confirmed an unknown Host gets 403. Re-ran the health check once the server was up.
 - Time lost: ~3 min
 - Category: docs
+
+### 2026-10-14: basic-host's serve script needs Bun
+- Who: agent
+- Trying to: run basic-host for verification step 2
+- What went wrong / was guessed: the README says `npm start`, but that runs `bun --watch serve.ts`, and Bun isn't installed. The quickstart only says Node 20+.
+- Workaround: ran `npm run build` and then `npx tsx serve.ts` in `examples/basic-host`. Works the same.
+- Time lost: ~2 min
+- Category: testing
+
+### 2026-10-14: Overlapping Playwright calls left the card on question 3
+- Who: agent
+- Trying to: screenshot the card and click the first answer
+- What went wrong / was guessed: I sent screenshot, click and snapshot calls in parallel. The screenshots failed (Playwright can only write inside the repo, not the scratchpad), and the click reported "Ref not found", yet the card had moved on to question 3. I suspected a card bug.
+- Workaround: re-ran from a fresh page with one scripted click at a time and checked the state after each. The card behaved correctly (including ignoring a second click), so the overlapping calls caused it, not the card. Saved screenshots under `.playwright-mcp/` (now in .gitignore) and copied them to `docs/verification/`.
+- Time lost: ~8 min
+- Category: testing
+
+### 2026-10-14: Host success/danger backgrounds made text hard to read in dark mode
+- Who: agent
+- Trying to: check the card in basic-host's dark theme
+- What went wrong / was guessed: I coloured answered options with the host's `--color-background-danger` and `--color-text-danger`. In basic-host's dark theme that gave light-red text on a mid-red background, which was hard to read. Claude's palette is unknown until step 7.
+- Workaround: show right/wrong with a 2px coloured border and a coloured ✓/✗ label; option text keeps the normal text colour. Re-checked in both themes.
+- Time lost: ~4 min
+- Category: host behaviour
