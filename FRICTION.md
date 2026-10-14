@@ -95,3 +95,19 @@
 - Workaround: read the field names from `tools/list` and re-ran with `topic`; ran git commands as `quizcard` (`sudo -u quizcard git -C ...`).
 - Time lost: ~3 min
 - Category: deploying
+
+### 2026-10-14: Claude's built-in quiz widget was chosen over show_quiz
+- Who: Tom
+- Trying to: run "quiz me on UK capitals" in Claude.ai with the connector enabled (step 7)
+- What went wrong / was guessed: Claude used its own built-in quiz widget, so our card never rendered and nothing showed that show_quiz had lost. It only called show_quiz when the tool was named explicitly in the prompt. The old description said "Use when the user asks to be quizzed" without saying to prefer it over built-ins.
+- Workaround: named the tool in the prompt. Then rewrote the description to say ALWAYS use it instead of any built-in quiz or flashcard feature or text questions, with example phrasings. Whether this fixes unprompted use needs Tom's re-test (TEST-SCRIPT.md, test 1).
+- Time lost: ~10 min
+- Category: host behaviour
+
+### 2026-10-14: Card doesn't report the score back, so Claude says "Good luck!" after the quiz
+- Who: Tom
+- Trying to: finish a quiz in Claude.ai and see how Claude reacts (step 7)
+- What went wrong / was guessed: the card keeps the score to itself. Claude only knows it showed a quiz, so after the final score it replied "Good luck!" as if the quiz were just starting.
+- Workaround: none in v1 (out of scope). Noted as v2 in the README: the card would send the score to the host (e.g. a model-context update or follow-up message) when the quiz ends.
+- Time lost: ~0 min (observed)
+- Category: host behaviour

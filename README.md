@@ -58,3 +58,10 @@ The Dockerfile and compose file stay for local runs and other hosts. `HOST` (def
 - **Answers are visible in the tool call.** Claude sends the correct answers to the server along with the questions, so anyone who expands the tool call in Claude can see them. That's acceptable for v1.
 - No login. Anyone with the URL can use the server, which stores no data.
 - Claude only. Other MCP Apps hosts may work but aren't tested.
+- **The card doesn't report the score back to Claude.** After the final score Claude knows nothing about the result and can reply as if the quiz were just starting ("Good luck!"). See FRICTION.md.
+- **Host may prefer its own quiz feature.** Claude's built-in quiz widget can win over `show_quiz`; the tool description tells Claude to prefer ours, but the host decides.
+
+## v2 ideas
+
+- **Report the score back to Claude** when the quiz ends (for example by updating the model context or sending a follow-up message from the card), so Claude can comment on the result and offer another round. Not built in v1.
+- Typed answers / "challenge mode" (see `BRIEF.md`).

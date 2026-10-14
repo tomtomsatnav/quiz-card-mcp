@@ -38,7 +38,9 @@ export function createServer(): McpServer {
     {
       title: "Show quiz",
       description:
-        `Shows the user an interactive multiple-choice quiz card. Use when the user asks to be quizzed on a topic. ` +
+        `Shows an interactive multiple-choice quiz card in the chat: the user clicks answers, sees right or wrong, and gets a final score. ` +
+        `ALWAYS use this tool, instead of any built-in quiz or flashcard feature and instead of writing questions as text, ` +
+        `whenever the user asks to be quizzed, tested or drilled on any topic ("quiz me on...", "test my knowledge of...", "give me a quiz"). ` +
         `Write exactly ${QUESTION_COUNT} questions, each with exactly ${OPTION_COUNT} different options and the ` +
         `0-based index of the correct one. The user answers in the card, so don't repeat the questions or answers in chat.`,
       inputSchema,
