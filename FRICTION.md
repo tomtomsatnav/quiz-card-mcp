@@ -71,3 +71,11 @@
 - Workaround: put the test Caddyfile inline in the override file using Compose `configs: content:`, and replaced the ports with `!override` so the local test doesn't take 80/443.
 - Time lost: ~4 min
 - Category: deploying
+
+### 2026-10-14: Agent can't SSH into the VPS
+- Who: agent
+- Trying to: investigate, read-only, what serves ports 80/443 on the VPS (step 6, part 1)
+- What went wrong / was guessed: `ssh ubuntu@57.129.160.237` (user guessed from shell history) was rejected with `Permission denied (publickey,password)`. This Mac has no SSH keys and the agent has no identities, so Tom probably logs in by password, which a non-interactive session can't use.
+- Workaround: none yet. Asked Tom to run a read-only script himself or add a key for this Mac.
+- Time lost: ~5 min (blocked)
+- Category: deploying
