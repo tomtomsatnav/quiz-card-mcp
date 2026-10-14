@@ -43,6 +43,16 @@ curl https://quiz.duoswipe.lol/health
 
 The Claude custom connector URL is `https://quiz.duoswipe.lol/mcp`.
 
+### Live deployment (no Docker)
+
+The live VPS doesn't use the compose stack: a system Caddy already owns ports 80/443 for another site, and Docker isn't installed. Instead:
+- `quiz-card.service` (systemd) runs `node dist/server/main.js` as the unprivileged `quizcard` user from `/srv/quiz-card`, with `HOST=127.0.0.1`, `PORT=3001` and `ALLOWED_HOSTS=quiz.duoswipe.lol,localhost,127.0.0.1`.
+- The existing Caddy has an extra `quiz.duoswipe.lol` block that proxies to `127.0.0.1:3001` and reuses the Cloudflare Origin Certificate.
+- The `quiz` DNS record is proxied through Cloudflare (the firewall only admits Cloudflare on 443).
+- Update with: `sudo -u quizcard git -C /srv/quiz-card pull && (cd /srv/quiz-card && sudo -u quizcard env HOME=/srv/quiz-card npm ci && sudo -u quizcard env HOME=/srv/quiz-card npm run build) && sudo systemctl restart quiz-card`.
+
+The Dockerfile and compose file stay for local runs and other hosts. `HOST` (default `0.0.0.0`) sets the bind address.
+
 ## Known limitations
 
 - **Answers are visible in the tool call.** Claude sends the correct answers to the server along with the questions, so anyone who expands the tool call in Claude can see them. That's acceptable for v1.

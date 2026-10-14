@@ -45,3 +45,37 @@ Step 6, the VPS deploy, needs Tom's go-ahead before any command runs on the VPS:
 2. Check that ports 80 and 443 are open.
 3. Install Docker if needed, clone the repo, and run `docker compose up -d --build`.
 4. Verify that `https://quiz.duoswipe.lol/health` and `/mcp` respond, and that Caddy forwards the real Host header (no 403).
+
+## Step 6: VPS deploy (2026-10-14)
+
+### What changed
+- **Deployed without Docker.** The VPS has a system Caddy 2.6.2 on 80/443 for duoswipe.lol, no Docker, and ufw allows 443 only from Cloudflare (80 closed). So the step 5 compose stack isn't used there.
+- `quiz` DNS switched to proxied (Cloudflare) by Tom.
+- On the VPS: user `quizcard` (system, `nologin`), repo cloned over HTTPS to `/srv/quiz-card` at `721fbe8`, `npm ci` and `npm run build` as `quizcard`, and `/etc/systemd/system/quiz-card.service` (enabled, running). It sets `HOST=127.0.0.1`, `PORT=3001`, `ALLOWED_HOSTS=quiz.duoswipe.lol,localhost,127.0.0.1`, `Restart=on-failure`, `NoNewPrivileges`, `ProtectSystem=strict`, `ProtectHome`, `PrivateTmp`.
+- `/etc/caddy/Caddyfile`: appended one `quiz.duoswipe.lol` block (origin cert from the wildcard, `reverse_proxy 127.0.0.1:3001`). Existing blocks, firewall and the other DNS records untouched. Backup: `/etc/caddy/Caddyfile.bak-20261014-145215`.
+- Repo: `main.ts` gets a `HOST` env var (default `0.0.0.0`); README documents the live setup and update command.
+
+### How it was checked
+| Check | Result |
+|---|---|
+| `systemctl is-active quiz-card` | `active` |
+| Listener | `127.0.0.1:3001` only |
+| Local `/health` on the VPS | `{"status":"ok"}` |
+| `caddy validate` before reload | Valid configuration |
+| `systemctl reload caddy` (not restart) | `active` |
+| `https://duoswipe.lol` straight after reload | `200` |
+| `https://quiz.duoswipe.lol/health` (via Cloudflare) | `200`, `server: cloudflare` |
+| MCP `initialize` through the public URL | serverInfo `Quiz Card` 1.0.0 |
+| `tools/list` | `show_quiz`, `_meta.ui.resourceUri` `ui://quiz/mcp-app.html` |
+| `tools/call show_quiz` (5 valid questions) | success text plus `structuredContent` |
+| `resources/read` of the card | `text/html;profile=mcp-app` |
+| Local tests before pushing | 15 passed |
+
+Calls were made with curl from the Mac, so they went through the Cloudflare proxy with Streamable HTTP responses (SSE `event: message`) intact. I did not test long-running requests against Cloudflare's 100 s timeout (the tool returns immediately), and not from Anthropic's servers: that is step 7.
+
+### Friction logged
+- Step 5 plan didn't match the VPS (Docker absent, Cloudflare-only firewall, port 80 closed, shared Caddy). Logged under deploying.
+- First live `show_quiz` call used `title` instead of `topic` (my mistake), and a `git log` run as the wrong user hit "dubious ownership".
+
+### What's next
+Step 7: add `https://quiz.duoswipe.lol/mcp` as a custom connector in Claude and run the quiz there. That's the first test from Anthropic's servers and in Claude's own host styling, which is where Bot Fight Mode or WAF rules could still interfere.

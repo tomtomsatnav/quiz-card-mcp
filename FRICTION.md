@@ -87,3 +87,11 @@
 - Workaround: put `quiz` behind Cloudflare (proxied), add a site block to the existing Caddy that reuses the wildcard origin certificate, and run the app as a systemd service under a dedicated user. Added a `HOST` env var to `main.ts` (default 0.0.0.0 for the container; 127.0.0.1 on the VPS). Dockerfile and compose stay for local runs.
 - Time lost: ~25 min
 - Category: deploying
+
+### 2026-10-14: Wrong argument name in the first live show_quiz call; git ownership check
+- Who: agent
+- Trying to: run the final `show_quiz` check through https://quiz.duoswipe.lol/mcp (step 6)
+- What went wrong / was guessed: I wrote the test call from memory with `title` instead of `topic`; the server correctly returned `isError` (`topic: expected string, received undefined`). Earlier in the same step, a `git log` run as `ubuntu` in the `quizcard`-owned clone failed with "dubious ownership" and made the whole SSH command exit 128, although the clone had worked.
+- Workaround: read the field names from `tools/list` and re-ran with `topic`; ran git commands as `quizcard` (`sudo -u quizcard git -C ...`).
+- Time lost: ~3 min
+- Category: deploying
